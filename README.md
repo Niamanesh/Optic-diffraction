@@ -6,4 +6,4 @@ The third column has to contain the distance between diffraction grating and the
 
 Please note that the all of the measurements has to be in SI system.
 
-In the university laboratory we have many insutruments and each of them contain their own diffraction grating which means their period. For changing the value of this period u can change the value of ***r8_d*** in the code file.
+In the university laboratory we have many insutruments and each of them contain their own diffraction grating which means they have different periods. For changing the value of this period u can change the value of ***r8_d*** in the code file.
