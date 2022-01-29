@@ -1,5 +1,5 @@
 !!Niamanesh 28.01.2022
-!!edited 29.01.2022
+!!Edited 29.01.2022
 program Diffraction
 
   implicit none
