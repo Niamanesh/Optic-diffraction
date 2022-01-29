@@ -1,10 +1,11 @@
 !!Niamanesh 28.01.2022
+!!edited 29.01.2022
 program Diffraction
 
   implicit none
   real(8), allocatable, dimension(:):: r8_d
   real(8), allocatable, dimension(:,:):: r8_data
-  real(8), allocatable, dimension(:):: r8_result
+  real(8), allocatable, dimension(:,:):: r8_result
   real(8):: usr_st_num, r0, r1, r2
   integer:: i, j = 0, counter, st_num, f_check, r_check
   logical:: check = .TRUE., end = .True.
@@ -29,7 +30,7 @@ program Diffraction
   read(*,*) counter
   counter = counter - 1
   allocate(r8_data(0:2,0:counter)) !! 0 - число М, 1 - z, 2 - L
-  allocate(r8_result(0:counter))
+  allocate(r8_result(0:1,0:counter))
 
   do while(end)
     print*, "Enter the file full name :"
@@ -65,17 +66,23 @@ program Diffraction
   print*, "Calculating ..."
   do i = 0, counter, 1
 
-    r8_result(i) = (r8_d(st_num) / r8_data(0,i)) * SIN(ATAN(r8_data(1,i)/r8_data(2,i)))
+    r8_result(0,i) = (r8_d(st_num) / r8_data(0,i)) * SIN(ATAN(r8_data(1,i)/r8_data(2,i)))
+    r8_result(1,i) = sqrt(((SIN(ATAN(r8_data(1,i)/r8_data(2,i))) * 0.000001)/r8_data(0,i))**2 + &
+    ((r8_d(st_num) * COS(ATAN(r8_data(1,i)/r8_data(2,i))) * 0.001)/((r8_data(0,i)*(r8_data(2,i)&
+    + ((r8_data(1,i)**2)/r8_data(2,i))))))**2 + &
+    ((COS(ATAN(r8_data(1,i)/r8_data(2,i))) * r8_d(st_num) * r8_data(1,i) &
+    * 0.001)/(r8_data(0,i) * (r8_data(2,i)**2 + r8_data(1,i)**2)))**2 )
 
   end do
 
   print*, "Writing in output.csv ..."
   open(2, file = "output.csv", IOSTAT=f_check)
 
-  write(2,*) "M", ",   ", "Z",  ",   ", "L",  ",   ", "Длина волны"
+  write(2,*) "M", ",   ", "Z",  ",   ", "L",  ",   ", "λ", ",   ", "Δλ"
 
   do i = 0, counter, 1
-    write(2,*) r8_data(0,i), ",   ", r8_data(1,i),  ",   ", r8_data(2,i),  ",   ", r8_result(i)
+    write(2,*) r8_data(0,i), ",   ", r8_data(1,i),  ",   ", r8_data(2,i),  ",   ", r8_result(0,i),&
+    ",   ", r8_result(1,i)
   end do
 
   close(2)
